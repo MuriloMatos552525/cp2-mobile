@@ -34,7 +34,7 @@ const SobreScreen = () => {
           <View style={styles.item}>
             <Text style={styles.label}>Gerente de Projeto:</Text>
             <Text style={styles.value}>Giovanna Alvarez</Text>
-            <Text style={styles.value}>RMxxxxxx</Text>
+            <Text style={styles.value}>RM98892</Text>
           </View>
           <View style={styles.item}>
             <Text style={styles.label}>Desenvolvedor Frontend:</Text>
