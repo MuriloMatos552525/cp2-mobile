@@ -2,16 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, Image, StyleSheet, SafeAreaView, TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { useFonts, NanumPenScript_400Regular } from '@expo-google-fonts/nanum-pen-script';
 import { Ionicons } from '@expo/vector-icons';
 
 const API_KEY = '157c8aa1011d8ee27cbdbe624298e4a6';
 
+
+interface RootStackParamList {
+  navigate: any;
+  TelaInicial: undefined;
+  Detalhes: { movieId: number };
+  Pesquisa: undefined;
+  Favoritos: undefined;
+  Desenvolvedores: undefined;
+}
+
+
+interface Movie {
+  id: number;
+  poster_path?: string;
+  title: string;
+  
+}
+
 const TelaInicial: React.FC = () => {
-  const [popularMovies, setPopularMovies] = useState<any[]>([]);
-  const [topRatedMovies, setTopRatedMovies] = useState<any[]>([]);
-  const [upcomingMovies, setUpcomingMovies] = useState<any[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
+  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigation = useNavigation();
+  const [fontsLoaded] = useFonts({
+    NanumPenScript_400Regular,
+  });
+
+  const navigation = useNavigation<RootStackParamList>();
 
   useEffect(() => {
     fetchMovies();
@@ -22,20 +45,17 @@ const TelaInicial: React.FC = () => {
       const popularResponse = await axios.get(
         `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
       );
-      const popularData = popularResponse.data.results;
-      setPopularMovies(popularData);
+      setPopularMovies(popularResponse.data.results);
 
       const topRatedResponse = await axios.get(
         `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`
       );
-      const topRatedData = topRatedResponse.data.results;
-      setTopRatedMovies(topRatedData);
+      setTopRatedMovies(topRatedResponse.data.results);
 
       const upcomingResponse = await axios.get(
         `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}`
       );
-      const upcomingData = upcomingResponse.data.results;
-      setUpcomingMovies(upcomingData);
+      setUpcomingMovies(upcomingResponse.data.results);
 
       setLoading(false);
     } catch (error) {
@@ -48,7 +68,7 @@ const TelaInicial: React.FC = () => {
     navigation.navigate('Detalhes', { movieId });
   };
 
-  const renderMovieItem = ({ item }: { item: any }) => (
+  const renderMovieItem = ({ item }: { item: Movie }) => (
     <TouchableOpacity onPress={() => handleMoviePress(item.id)}>
       <Image
         source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }}
@@ -57,19 +77,14 @@ const TelaInicial: React.FC = () => {
     </TouchableOpacity>
   );
 
-  const renderSection = (title: string, data: any[]) => (
+  const renderSection = (title: string, data: Movie[]) => (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionTitle}>{title}</Text>
       {data.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {data.map((movie) => (
             <View key={movie.id} style={{ marginRight: 15 }}>
-              <TouchableOpacity onPress={() => handleMoviePress(movie.id)}>
-                <Image
-                  source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }}
-                  style={styles.poster}
-                />
-              </TouchableOpacity>
+              {renderMovieItem({ item: movie })} 
             </View>
           ))}
         </ScrollView>
@@ -80,16 +95,21 @@ const TelaInicial: React.FC = () => {
   );
 
   const handleLogoPress = () => {
-    navigation.navigate('Desenvolvedores');
+    navigation.navigate('Desenvolvedores', {}); // Passar um objeto vazio como parâmetro
   };
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#fff" />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleLogoPress}>
+        <TouchableOpacity onPress={handleLogoPress} style={styles.logoContainer}>
+          <Image source={require("../../assets/logo.png")} style={styles.logo} />
           <Text style={styles.appName}>MovieMu</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.searchButton} onPress={() => navigation.navigate('Pesquisa')}>
+        <TouchableOpacity style={styles.searchButton} onPress={() => navigation.navigate('Pesquisa', {})}>
           <Ionicons name="search" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
@@ -107,7 +127,7 @@ const TelaInicial: React.FC = () => {
           </>
         )}
       </ScrollView>
-      <TouchableOpacity style={styles.favoritesButton} onPress={() => navigation.navigate('Favoritos')}>
+      <TouchableOpacity style={styles.favoritesButton} onPress={() => navigation.navigate('Favoritos', {})}>
         <Ionicons name="heart" size={24} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -122,7 +142,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: 'row', 
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
@@ -131,6 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
+    fontFamily: 'NanumPenScript_400Regular', 
   },
   searchButton: {
     backgroundColor: '#222',
@@ -176,6 +197,16 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  logo: {
+    width: 40, 
+    height: 40, 
+    marginRight: 5, 
   },
 });
 

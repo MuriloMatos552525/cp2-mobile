@@ -84,8 +84,8 @@ const DetalhesScreen: React.FC<any> = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     alignItems: 'center',
+    backgroundColor: '#fff', 
   },
   poster: {
     width: 300,
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center', 
   },
   releaseDate: {
     fontSize: 16,
@@ -108,14 +109,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   addToFavoritesButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: '#007bff', 
+    padding: 15, 
+    borderRadius: 25, 
+    width: '80%', 
+    alignItems: 'center', 
+    marginBottom: 20, 
   },
   addToFavoritesButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center',
+    fontSize: 16,
   },
 });
 

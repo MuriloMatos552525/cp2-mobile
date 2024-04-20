@@ -19,11 +19,24 @@ interface MovieDetails {
   overview: string;
 }
 
+// Definição de tipos para a navegação
+interface RootStackParamList {
+  goBack(): unknown;
+  navigate: any;
+  TelaInicial: undefined;
+  Detalhes: { movieDetails: MovieDetails }; // Tipando a rota Detalhes
+  Pesquisa: undefined;
+  Favoritos: undefined;
+  Desenvolvedores: undefined;
+}
+
 const PesquisaScreen: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<Movie[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const navigation = useNavigation();
+
+  // Tipando a função navigation
+  const navigation = useNavigation<RootStackParamList>(); 
 
   useEffect(() => {
     fetchSuggestions();
@@ -50,7 +63,14 @@ const PesquisaScreen: React.FC = () => {
       const data = response.data;
       return data;
     } catch (error) {
-      console.error('Erro ao buscar os detalhes do filme:', error);
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        // Tratar o erro 404
+        console.error('Filme não encontrado.');
+        // Exibir uma mensagem de erro para o usuário ou redirecioná-lo
+      } else {
+        console.error('Erro ao buscar os detalhes do filme:', error);
+        // Tratar outros erros
+      }
       return null;
     }
   };
@@ -70,7 +90,7 @@ const PesquisaScreen: React.FC = () => {
   const handleMoviePress = async (movie: Movie) => {
     const movieDetails = await fetchMovieDetailsById(movie.id);
     if (movieDetails) {
-      navigation.navigate('Detalhes', { movieDetails });
+      navigation.navigate('Detalhes', { movieDetails }); 
     }
   };
 
