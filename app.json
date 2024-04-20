@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ProjetoGif-PM",
-    "slug": "ProjetoGif-PM",
+    "name": "Moviemu-cp2",
+    "slug": "moviemu-cp2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,8 +29,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d36add86-b7f9-42cb-bba7-8b13330a8d1e"
+        "projectId": "f06d78b4-6a65-487e-baa8-3b1be4bef28b"
       }
-    }
+    },
+    "owner": "murilomatos01"
   }
 }
