@@ -7,7 +7,6 @@
       },
       "preview2": {
         "android": {
-          "image": "latest",
           "gradleCommand": ":app:assembleRelease"
         }
       },
