@@ -17,6 +17,8 @@ Para começar a usar o MovieMu, siga estas etapas simples:
 4. Execute `npm start` para iniciar o servidor de desenvolvimento.
 
 5. Abra o aplicativo em um emulador ou dispositivo móvel para começar a explorar os filmes!
+   
+6.Ao clicar na logo do app voce encontrara a tela de desenvolvedores 
 
 ## Funções Atuais
 
