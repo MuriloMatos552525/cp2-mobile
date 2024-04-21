@@ -1,4 +1,4 @@
-# MovieMu
+# MovieMu Checkpoint 2 - MOBILE APPLICATION DEVELOPMENT
 
 ## Sobre o App
 
